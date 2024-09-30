@@ -1,7 +1,6 @@
 package com.server.validators.custom
 
 import com.server.commands.SetUpWifiCommand
-import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
 import org.springframework.validation.Errors

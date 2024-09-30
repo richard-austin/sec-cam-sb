@@ -1,16 +1,21 @@
 package com.server.controllers
 
 import com.server.commands.SetUpWifiCommand
+import com.server.commands.SetupWifiCommand2
 import com.server.validators.custom.SetupWifiValidator
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.validation.BeanPropertyBindingResult
 import org.springframework.validation.BindingResult
 import org.springframework.validation.Errors
+import org.springframework.validation.FieldError
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.WebDataBinder
+import org.springframework.web.bind.annotation.ExceptionHandler
 
 //import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import com.server.interfacebjects.ObjectCommandResponse
 
@@ -62,7 +68,7 @@ class WifiUtilsController {
 //            def errorsMap = validationErrorService.commandErrors(cmd.errors as ValidationErrors, 'setUpWifi')
 //            logService.cam.error "setUpWifi: Validation error: " + errorsMap.toString()
 //            render(status: 400, text: errorsMap as JSON)
-            System.out.println("Has errors")
+            return ResponseEntity.badRequest().body(errors.getAllErrors())
         } else {
 //            result = wifiUtilsService.setUpWifi(cmd)
 //
@@ -73,7 +79,7 @@ class WifiUtilsController {
 //                result.status = PassFail.FAIL
 //                render(status: result.errno, text: result.responseObject as JSON)
 //            }
-            System.out.println("It worked!")
+           return ResponseEntity.ok('It Worked!')
         }
     }
 
@@ -89,6 +95,29 @@ class WifiUtilsController {
         }
     }
 
+    @PostMapping("/setupWifi2")
+    ResponseEntity<?> setupWifi2(@Valid @RequestBody SetupWifiCommand2 cmd) {
+//        if(result.hasErrors()) {
+//            System.out.println("There are errors")
+//            return ResponseEntity.badRequest()
+//        }
+//        else
+            return ResponseEntity.ok("Wifi settings are valid")
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
+
+    // The audio websocket listener
     boolean started = false
     int count = 0
     OutputStream os
