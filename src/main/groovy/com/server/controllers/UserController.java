@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.server.commands.User;
-import com.server.repositories.UserRepository;
+import com.server.commands.TestUser;
+import com.server.repositories.TestUserRepository;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,20 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
+//    private final TestUserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(TestUserRepository userRepository) {
+//        this.userRepository = userRepository;
     }
 
-    @GetMapping("/users")
-    public List<User> getUsers() {
-        return (List<User>) userRepository.findAll();
-    }
+//    @GetMapping("/users")
+//    public List<TestUser> getUsers() {
+//        return (List<TestUser>) userRepository.findAll();
+//    }
 
     @PostMapping("/users")
-    ResponseEntity<String> addUser(@Valid @RequestBody User user) {
+    @Secured("ROLE_USER")
+    ResponseEntity<String> addUser(@Valid @RequestBody TestUser user) {
         return ResponseEntity.ok("User is valid");
     }
     

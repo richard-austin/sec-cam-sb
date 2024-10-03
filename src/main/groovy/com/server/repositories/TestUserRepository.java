@@ -1,8 +1,8 @@
 package com.server.repositories;
 
-import com.server.commands.User;
+import com.server.commands.TestUser;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {}
+public interface TestUserRepository extends CrudRepository<TestUser, Long> {}

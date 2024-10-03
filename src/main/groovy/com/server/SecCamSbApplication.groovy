@@ -1,12 +1,14 @@
 package com.server
 
-import com.server.commands.User
-import com.server.repositories.UserRepository
+import com.server.commands.TestUser
+import com.server.configuration.ContextRefreshedListener
+import com.server.repositories.TestUserRepository
+import com.server.services.UserService
+import com.server.web.dto.UserDto
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.core.env.Environment
@@ -14,7 +16,9 @@ import org.springframework.core.env.Environment
 @SpringBootApplication(/*exclude = SecurityAutoConfiguration.class*/)
 class SecCamSbApplication {
     static void main(String[] args) {
-        SpringApplication.run(SecCamSbApplication, args)
+        SpringApplication app = new SpringApplication(SecCamSbApplication.class);
+        app.addListeners(new ContextRefreshedListener());
+        app.run(args);
     }
 
     @Bean
@@ -33,14 +37,17 @@ class SecCamSbApplication {
     }
 
     @Bean
-    public CommandLineRunner run(UserRepository userRepository) {
+    CommandLineRunner run(UserService userService) {
         return (String[] args) -> {
-            User user1 = new User("Bob", "bob@domain.com");
-            User user2 = new User("Jenny", "jenny@domain.com");
-            userRepository.save(user1);
-            userRepository.save(user2);
-            userRepository.findAll().forEach(System.out::println);
-        };
+//            TestUser user1 = new TestUser("Bob", "bob@domain.com");
+//            TestUser user2 = new TestUser("Jenny", "jenny@domain.com");
+//            userRepository.save(user1);
+//            userRepository.save(user2);
+//            userRepository.findAll().forEach(System.out::println);
+
+            userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", firstName: "Richard", lastName: "Austin"))
+
+        }
     }
 
     @Bean
@@ -49,5 +56,4 @@ class SecCamSbApplication {
             System.out.println("message from application.properties " + environment.getProperty("spring.jpa.properties.hibernate.globally_quoted_identifiers"));
         };
     }
-
 }
