@@ -16,9 +16,9 @@ import org.springframework.core.env.Environment
 @SpringBootApplication(/*exclude = SecurityAutoConfiguration.class*/)
 class SecCamSbApplication {
     static void main(String[] args) {
-        SpringApplication app = new SpringApplication(SecCamSbApplication.class);
-        app.addListeners(new ContextRefreshedListener());
-        app.run(args);
+        SpringApplication app = new SpringApplication(SecCamSbApplication.class)
+        app.addListeners(new ContextRefreshedListener())
+        app.run(args)
     }
 
     @Bean
@@ -45,7 +45,7 @@ class SecCamSbApplication {
 //            userRepository.save(user2);
 //            userRepository.findAll().forEach(System.out::println);
 
-            userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", firstName: "Richard", lastName: "Austin"))
+        //     userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", firstName: "Richard", lastName: "Austin"))
 
         }
     }
@@ -53,7 +53,7 @@ class SecCamSbApplication {
     @Bean
     ApplicationRunner applicationRunner(Environment environment) {
         return (args) -> {
-            System.out.println("message from application.properties " + environment.getProperty("spring.jpa.properties.hibernate.globally_quoted_identifiers"));
-        };
+            System.out.println("message from application.properties " + environment.getProperty("spring.jpa.properties.hibernate.globally_quoted_identifiers"))
+        }
     }
 }

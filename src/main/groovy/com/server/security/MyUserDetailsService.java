@@ -34,18 +34,18 @@ public class MyUserDetailsService implements UserDetailsService {
     // API
 
     @Override
-    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 //        if (loginAttemptService.isBlocked()) {
 //            throw new RuntimeException("blocked");
 //        }
 //
         try {
-            final User user = userRepository.findByEmail(email);
+            final User user = userRepository.findByUsername(username);
             if (user == null) {
-                throw new UsernameNotFoundException("No user found with username: " + email);
+                throw new UsernameNotFoundException("No user found with username: " + username);
             }
 
-            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

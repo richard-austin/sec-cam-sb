@@ -19,25 +19,26 @@ class UserService {
     RoleRepository roleRepository
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder
 
     User registerNewUserAccount(final UserDto accountDto) {
         if (emailExists(accountDto.getEmail())) {
-            throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail());
+            throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail())
         }
-        final User user = new User();
+        final User user = new User()
 
-        user.setFirstName(accountDto.getFirstName());
-        user.setLastName(accountDto.getLastName());
+        user.setFirstName(accountDto.getFirstName())
+        user.setLastName(accountDto.getLastName())
         user.setUsername(accountDto.getUsername())
-        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
-        user.setEmail(accountDto.getEmail());
-        user.setUsing2FA(accountDto.isUsing2FA());
-        user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")));
-        return userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(accountDto.getPassword()))
+        user.setEmail(accountDto.getEmail())
+        user.setUsing2FA(accountDto.isUsing2FA())
+        user.setEnabled(true)
+        user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")))
+        return userRepository.save(user)
     }
 
     private boolean emailExists(final String email) {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.findByEmail(email) != null
     }
 }
