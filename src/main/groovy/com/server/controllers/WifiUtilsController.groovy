@@ -14,6 +14,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.BeanPropertyBindingResult
 import org.springframework.validation.Errors
 import org.springframework.validation.FieldError
@@ -85,6 +87,7 @@ class WifiUtilsController {
     }
 
     @PostMapping("/setupWifi2")
+    @Secured("ROLE_CLIENT")
     ResponseEntity<?> setupWifi2(@Valid @RequestBody SetupWifiCommand2 cmd) {
 //        if(result.hasErrors()) {
 //            System.out.println("There are errors")

@@ -1,13 +1,10 @@
 package com.server.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.aspectj.lang.annotation.RequiredTypes;
 import org.jboss.aerogear.security.otp.api.Base32;
-import org.springframework.data.domain.Limit;
 
 import java.util.Collection;
 
@@ -15,10 +12,10 @@ import java.util.Collection;
 @Table(name = "user_account")
 public class User {
 
-    @Id
-    @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+//    @Id
+//    @Column(unique = true, nullable = false)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Long id;
 
     private String firstName;
 
@@ -26,6 +23,7 @@ public class User {
 
     private String email;
 
+    @Id
     @Column(length = 40)
     @Size(min=5, max = 40)
     @NotBlank
@@ -47,7 +45,7 @@ public class User {
     //
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
     public User() {
@@ -56,13 +54,20 @@ public class User {
         this.enabled = false;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(final Long id) {
+//        this.id = id;
+//    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(final Long id) {
+//        this.id = id;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -163,8 +168,8 @@ public class User {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("User [id=")
-                .append(id)
+        builder.append("User [username=")
+                .append(username)
                 .append(", firstName=").append(firstName)
                 .append(", lastName=").append(lastName)
                 .append(", email=").append(email)

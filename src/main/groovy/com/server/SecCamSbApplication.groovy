@@ -1,8 +1,6 @@
 package com.server
 
-import com.server.commands.TestUser
 import com.server.configuration.ContextRefreshedListener
-import com.server.repositories.TestUserRepository
 import com.server.services.UserService
 import com.server.web.dto.UserDto
 import org.springframework.boot.ApplicationRunner
@@ -39,14 +37,11 @@ class SecCamSbApplication {
     @Bean
     CommandLineRunner run(UserService userService) {
         return (String[] args) -> {
-//            TestUser user1 = new TestUser("Bob", "bob@domain.com");
-//            TestUser user2 = new TestUser("Jenny", "jenny@domain.com");
-//            userRepository.save(user1);
-//            userRepository.save(user2);
-//            userRepository.findAll().forEach(System.out::println);
-
-        //     userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", firstName: "Richard", lastName: "Austin"))
-
+            if(!userService.roleExists('ROLE_CLIENT'))
+                userService.addRole('ROLE_CLIENT')
+            
+            if(!userService.userNameExists('austin'))
+                userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", firstName: "Richard", lastName: "Austin"))
         }
     }
 
