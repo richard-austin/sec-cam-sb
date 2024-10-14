@@ -1,6 +1,7 @@
 package com.server.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,11 +18,11 @@ public class User {
 //    @GeneratedValue(strategy = GenerationType.AUTO)
 //    private Long id;
 
-    private String firstName;
-
-    private String lastName;
-
+    @Email
     private String email;
+
+    private boolean cloudAccount = false;
+    private String header = "";
 
     @Id
     @Column(length = 40)
@@ -38,8 +39,6 @@ public class User {
 
     private boolean enabled;
 
-    private boolean isUsing2FA;
-
     private String secret;
 
     //
@@ -52,37 +51,6 @@ public class User {
         super();
         this.secret = Base32.random();
         this.enabled = false;
-    }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(final Long id) {
-//        this.id = id;
-//    }
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(final Long id) {
-//        this.id = id;
-//    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -107,6 +75,22 @@ public class User {
         this.password = password;
     }
 
+    public boolean getCloudAccount() {
+        return cloudAccount;
+    }
+
+    public void setCloudAccount(final boolean cloudAccount) {
+        this.cloudAccount = cloudAccount;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(final String header) {
+        this.header = header;
+    }
+
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -121,14 +105,6 @@ public class User {
 
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public boolean isUsing2FA() {
-        return isUsing2FA;
-    }
-
-    public void setUsing2FA(boolean isUsing2FA) {
-        this.isUsing2FA = isUsing2FA;
     }
 
     public String getSecret() {
@@ -170,11 +146,8 @@ public class User {
         final StringBuilder builder = new StringBuilder();
         builder.append("User [username=")
                 .append(username)
-                .append(", firstName=").append(firstName)
-                .append(", lastName=").append(lastName)
                 .append(", email=").append(email)
                 .append(", enabled=").append(enabled)
-                .append(", isUsing2FA=").append(isUsing2FA)
                 .append(", secret=").append(secret)
                 .append(", roles=").append(roles)
                 .append("]");

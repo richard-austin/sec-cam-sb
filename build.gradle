@@ -41,6 +41,14 @@ dependencies {
 
     implementation group: 'org.jboss.aerogear', name: 'aerogear-otp-java', version: '1.0.0'
     implementation 'org.springframework.security:spring-security-crypto:6.3.3'
+    // https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api
+    implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
+// https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+    compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.1.0'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.10'
+    //implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
+
 //    implementation 'com.google.guava:guava'
 
 }
