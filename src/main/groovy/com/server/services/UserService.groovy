@@ -28,14 +28,11 @@ class UserService {
         }
         final User user = new User()
 
-//        user.setFirstName(accountDto.getFirstName())
-//        user.setLastName(accountDto.getLastName())
         user.setUsername(accountDto.getUsername())
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()))
         user.setEmail(accountDto.getEmail())
-//        user.setUsing2FA(accountDto.isUsing2FA())
-        user.setCloudAccount(false)
-        user.setHeader("")
+        user.setCloudAccount(accountDto.getCloudAccount())
+        user.setHeader(accountDto.getHeader())
         user.setEnabled(true)
         user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_CLIENT")))
         return userRepository.save(user)

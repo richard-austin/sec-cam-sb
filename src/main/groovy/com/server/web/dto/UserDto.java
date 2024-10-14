@@ -26,14 +26,31 @@ public class UserDto {
     @Size(min = 1, message = "{Size.userDto.email}")
     private String email;
 
+    private boolean cloudAccount;
+    private String header;
+
     private boolean isUsing2FA;
 
     public String getEmail() {
         return email;
     }
 
+    public boolean getCloudAccount() {
+        return cloudAccount;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
     public void setEmail(final String email) {
         this.email = email;
+    }
+    public void setCloudAccount(final boolean cloudAccount) {
+        this.cloudAccount = cloudAccount;
+    }
+    public void setHeader(final String header) {
+        this.header = header;
     }
 
     private Integer role;
@@ -46,16 +63,9 @@ public class UserDto {
         this.role = role;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
 
     public void setFirstName(final String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 
     public void setLastName(final String lastName) {
@@ -86,25 +96,13 @@ public class UserDto {
         this.matchingPassword = matchingPassword;
     }
 
-    public boolean isUsing2FA() {
-        return isUsing2FA;
-    }
-
-    public void setUsing2FA(boolean isUsing2FA) {
-        this.isUsing2FA = isUsing2FA;
-    }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append("UserDto [firstName=")
-                .append(firstName)
-                .append(", lastName=")
-                .append(lastName)
                 .append(", email=")
                 .append(email)
-                .append(", isUsing2FA=")
-                .append(isUsing2FA)
                 .append(", role=")
                 .append(role).append("]");
         return builder.toString();

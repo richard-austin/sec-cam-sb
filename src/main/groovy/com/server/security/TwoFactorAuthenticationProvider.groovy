@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -69,7 +70,7 @@ class TwoFactorAuthenticationProvider extends DaoAuthenticationProvider{
     String requiredXAuthToken(String userName)
     {
         try {
-            User user = User.findByUsername(userName)
+            User user = userDetailsService.loadUserByUsername(userName)
 
             return user.header
         }

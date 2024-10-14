@@ -40,9 +40,11 @@ class SecCamSbApplication {
         return (String[] args) -> {
             if(!userService.roleExists('ROLE_CLIENT'))
                 userService.addRole('ROLE_CLIENT')
-            
+
             if(!userService.userNameExists('austin'))
-                userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", firstName: "Richard", lastName: "Austin"))
+                userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", cloudAccount: false, firstName: "Richard", lastName: "Austin"))
+            if(!userService.userNameExists('cloud'))
+                userService.registerNewUserAccount(new UserDto(username: "cloud", password:"password", email: "a@c.com", cloudAccount: true, header: "123123123", firstName: "Cloud", lastName: "Server"))
         }
     }
 

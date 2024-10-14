@@ -1,17 +1,20 @@
 package com.server.model;
 
+import com.server.security.MyUserDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.jboss.aerogear.security.otp.api.Base32;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "user_account")
-public class User {
+public class User implements MyUserDetails {
 
 //    @Id
 //    @Column(unique = true, nullable = false)
@@ -47,6 +50,16 @@ public class User {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
+    public User(String username, String password, boolean enabled, boolean cloudAccount, String header, String secret) {
+        super();
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.cloudAccount = cloudAccount;
+        this.header = header;
+        this.secret = secret;
+    }
+
     public User() {
         super();
         this.secret = Base32.random();
@@ -67,6 +80,11 @@ public class User {
 
     public String getUsername() {return username;}
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
     public String getPassword() {
         return password;
     }
@@ -85,6 +103,11 @@ public class User {
 
     public String getHeader() {
         return header;
+    }
+
+    @Override
+    public boolean getEnabled() {
+        return false;
     }
 
     public void setHeader(final String header) {
