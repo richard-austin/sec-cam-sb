@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -36,7 +35,7 @@ class TwoFactorAuthenticationProvider extends DaoAuthenticationProvider{
             TwoFactorAuthenticationDetails tfad = details
             String userName = userDetails.getUsername()
             if (getIsCloudAccount(userName) && tfad.xAuthToken != requiredXAuthToken(userName)) {
-                logService.cam.debug("Authentication failed: authtoken incorrect for Cloud account valid")
+                logService.cam.debug("Authentication failed: authtoken incorrect for Cloud account")
                 throw new BadCredentialsException(messages.getMessage(
                         "AbstractUserDetailsAuthenticationProvider.badCredentials",
                         "Bad credentials"))
@@ -63,7 +62,7 @@ class TwoFactorAuthenticationProvider extends DaoAuthenticationProvider{
         {
             logService.cam.error(ex.getClass().getName()+" exception in isCloudAccount: "+ex.getMessage())
         }
-        true
+        false
     }
 
     @Transactional
@@ -79,5 +78,10 @@ class TwoFactorAuthenticationProvider extends DaoAuthenticationProvider{
             logService.cam.error(ex.getClass().getName()+" exception in header: "+ex.getMessage())
         }
         ""
+    }
+
+    @Override
+    boolean supports(Class<?> authentication) {
+        return authentication == UsernamePasswordAuthenticationToken.class;
     }
 }

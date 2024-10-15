@@ -1,21 +1,18 @@
 package com.server.web.dto;
 
+import groovy.transform.EqualsAndHashCode;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserDto {
     @NotNull
-    @Size(min = 1, message = "{Size.userDto.firstName}")
-    private String firstName;
-
-    @NotNull
-    @Size(min = 1, message = "{Size.userDto.lastName}")
-    private String lastName;
-
-    @NotNull
     @Size(min = 5, max=30)
+    @Pattern(regexp =  "^[a-zA-Z0-9](_(?!(.|_))|.(?!(_|.))|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$", message = "Incorrect characters for username")
     private String username;
 
+    @Pattern(regexp = "^[A-Za-z0-9][A-Za-z0-9(){\\[1*£$\\\\\\]}=@~?^]{7,31}$", message = "Bad password format")
     private String password;
 
     @NotNull
@@ -23,13 +20,12 @@ public class UserDto {
     private String matchingPassword;
 
     @NotNull
-    @Size(min = 1, message = "{Size.userDto.email}")
+    @Size(min = 6, message = "{Size.userDto.email}")
+    @Email(message = "Incorrect email format")
     private String email;
 
     private boolean cloudAccount;
     private String header;
-
-    private boolean isUsing2FA;
 
     public String getEmail() {
         return email;
@@ -63,15 +59,6 @@ public class UserDto {
         this.role = role;
     }
 
-
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
-    }
-
     public @NotNull @Size(min = 5, max = 30) String getUsername() {
         return username;
     }
@@ -95,7 +82,6 @@ public class UserDto {
     public void setMatchingPassword(final String matchingPassword) {
         this.matchingPassword = matchingPassword;
     }
-
 
     @Override
     public String toString() {

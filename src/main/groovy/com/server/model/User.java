@@ -8,9 +8,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "user_account")
@@ -80,11 +81,6 @@ public class User implements MyUserDetails {
 
     public String getUsername() {return username;}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
     public String getPassword() {
         return password;
     }
@@ -114,6 +110,14 @@ public class User implements MyUserDetails {
         this.header = header;
     }
 
+    public Collection<GrantedAuthority> getAuthorities() {
+        final Collection<GrantedAuthority> retVal = new HashSet<>();
+        roles.forEach(role ->
+                retVal.add(new SimpleGrantedAuthority(role.getName())));
+        return retVal;
+    }
+
+    @Override
     public Collection<Role> getRoles() {
         return roles;
     }

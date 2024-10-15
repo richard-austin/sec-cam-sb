@@ -1,8 +1,14 @@
 package com.server
 
 import com.server.configuration.ContextRefreshedListener
+import com.server.model.Role
+import com.server.persistance.dao.RoleRepository
+import com.server.securingweb.MvcConfig
 import com.server.services.UserService
 import com.server.web.dto.UserDto
+import jakarta.validation.ConstraintViolation
+import jakarta.validation.ValidatorFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
@@ -11,6 +17,9 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.core.env.Environment
+
+import jakarta.xml.*
+import jakarta.validation.*;
 
 @SpringBootApplication(/*exclude = SecurityAutoConfiguration.class*/)
 class SecCamSbApplication {
@@ -35,16 +44,34 @@ class SecCamSbApplication {
         }
     }
 
+    @Autowired
+    RoleRepository roleRepository
+
     @Bean
     CommandLineRunner run(UserService userService) {
         return (String[] args) -> {
             if(!userService.roleExists('ROLE_CLIENT'))
                 userService.addRole('ROLE_CLIENT')
 
-            if(!userService.userNameExists('austin'))
-                userService.registerNewUserAccount(new UserDto(username: "austin", password:"password", email: "a@b.com", cloudAccount: false, firstName: "Richard", lastName: "Austin"))
-            if(!userService.userNameExists('cloud'))
-                userService.registerNewUserAccount(new UserDto(username: "cloud", password:"password", email: "a@c.com", cloudAccount: true, header: "123123123", firstName: "Cloud", lastName: "Server"))
+            if(!userService.roleExists('ROLE_CLOUD'))
+                userService.addRole('ROLE_CLOUD')
+
+            if(!userService.userNameExists('austin')) {
+                ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                Validator validator = factory.getValidator();
+
+                Role role = roleRepository.findByName("ROLE_CLIENT")
+                 if(role != null) {
+                     var user = new UserDto(username: "austin", password: "password", matchingPassword: "password", email: "a@b.com", cloudAccount: false, role: role.getId())
+                     Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
+                     userService.registerNewUserAccount(user)
+                 }
+            }
+            if(!userService.userNameExists('cloud')) {
+                Role role = roleRepository.findByName("ROLE_CLIENT")
+                if (role != null)
+                    userService.registerNewUserAccount(new UserDto(username: "cloud", password: "password", matchingPassword: "password", email: "a@c.com", cloudAccount: true, header: "123123123", role: role.getId()))
+            }
         }
     }
 

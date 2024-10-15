@@ -7,7 +7,6 @@ import com.server.persistance.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -41,11 +40,13 @@ public class MyUserDetailsService implements UserDetailsService {
 //
         try {
             final User user = userRepository.findByUsername(username);
+
             if (user == null) {
                 throw new UsernameNotFoundException("No user found with username: " + username);
             }
+         //   return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
 
-            return user;
+           return user;
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
@@ -78,5 +79,4 @@ public class MyUserDetailsService implements UserDetailsService {
         }
         return authorities;
     }
-
 }
